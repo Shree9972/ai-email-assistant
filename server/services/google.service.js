@@ -1,0 +1,24 @@
+const {google} = require('googleapis');
+const {GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI} = require('../config/env');
+
+const oauth2Client = new google.auth.OAuth2(
+    GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET,
+    GOOGLE_REDIRECT_URI
+);
+
+const getGoogleAuthURL = () => {
+
+    return oauth2Client.generateAuthUrl({
+        access_type: 'offline',
+        scope: [
+            "profile",
+            "email"
+        ]
+    });
+}   
+
+module.exports = {
+    oauth2Client,
+    getGoogleAuthURL,
+};
