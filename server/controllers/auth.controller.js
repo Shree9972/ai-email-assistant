@@ -1,5 +1,7 @@
 const {getGoogleAuthURL , getGoogleUser} = require('../services/google.service');
 
+const {findOrCreateUser} = require('../services/user.service');
+
 const getGoogleAuth = (req, res) => {
     
     const url = getGoogleAuthURL();
@@ -13,13 +15,15 @@ const googleCallback = async (req, res) => {
 
         const { code } = req.query;
 
-        console.log("Authorization code:", code);
+        //console.log("Authorization code:", code);
 
         const profile = await getGoogleUser(code);
 
+        const user = await findOrCreateUser(profile);
+
         res.status(200).json({
             success: true,
-            profile,
+            user,
         });
 
     } 

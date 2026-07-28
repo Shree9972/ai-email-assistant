@@ -25,7 +25,7 @@ const getGoogleUser = async (code) => {
 
     const {tokens} = await oauth2Client.getToken(code);
 
-    console.log("Tokens:", tokens);
+    //console.log("Tokens:", tokens);
 
     oauth2Client.setCredentials(tokens);
 
@@ -35,6 +35,8 @@ const getGoogleUser = async (code) => {
     }); 
 
     const {data} = await oauth2.userinfo.get();
+
+    //console.log("User profile data:", data);
 
     return data;
 }
