@@ -2,6 +2,8 @@ const {getGoogleAuthURL , getGoogleUser} = require('../services/google.service')
 
 const {findOrCreateUser} = require('../services/user.service');
 
+const {generateToken} = require('../services/jwt.service');
+
 const getGoogleAuth = (req, res) => {
     
     const url = getGoogleAuthURL();
@@ -21,8 +23,11 @@ const googleCallback = async (req, res) => {
 
         const user = await findOrCreateUser(profile);
 
+        const token = generateToken(user);
+
         res.status(200).json({
             success: true,
+            token,
             user,
         });
 
