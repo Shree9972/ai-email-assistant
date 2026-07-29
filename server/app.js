@@ -35,6 +35,6 @@ app.use("/api/users", userRoutes);
 //auth routes
 app.use("/api/auth", authRoutes);
 
-app.use("/api", healthRoutes);
+app.use("/api/health", healthRoutes);
 
 module.exports = app;
