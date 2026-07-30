@@ -25,9 +25,14 @@ const googleCallback = async (req, res) => {
 
         const token = generateToken(user);
 
+        console.log("Generated JWT token:", token);
+
+        res.cookie("token", token, {
+            httpOnly: true,
+        });
+
         res.status(200).json({
             success: true,
-            token,
             user,
         });
 

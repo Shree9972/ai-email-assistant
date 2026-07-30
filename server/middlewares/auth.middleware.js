@@ -5,24 +5,27 @@ const authMiddleware = async (req, res, next) => {
     try {
         const authHeader = req.headers.authorization;
 
-        // Check if Authorization header exists
-        if (!authHeader) {
-            return res.status(401).json({
-                success: false,
-                message: "Authorization header is missing."
-            });
+        let token;
+
+        if (authHeader?.startsWith("Bearer ")) 
+        {
+            token = authHeader.split(" ")[1];
+        } 
+        else if (req.cookies?.token) 
+        {
+            token = req.cookies.token;
         }
 
-        // Check Bearer token format
-        if (!authHeader.startsWith("Bearer ")) {
+        //console.log("This is from header.cookie",req.headers.cookie);
+        //console.log("This is from cookies",req.cookies);
+
+        if (!token) 
+        {
             return res.status(401).json({
                 success: false,
-                message: "Authorization header must start with 'Bearer'."
+                message: "No token provided."
             });
         }
-
-        const token = authHeader.split(" ")[1];
-
         // Verify JWT
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
