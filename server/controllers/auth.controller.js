@@ -47,7 +47,34 @@ const googleCallback = async (req, res) => {
     }
 };
 
+const getCurrentUser = (req, res) => {
+
+    try
+    {
+        if (!req.user)
+        {
+            return res.status(404).json({message: "User not found"});
+        }
+
+        res.status(200).json({
+            success: true,
+            user: {
+                id: req.user._id,
+                name: req.user.name,
+                email: req.user.email,
+                profilePicture: req.user.profilePicture,
+            },
+        });
+           
+    }
+    catch (error)
+    {
+        res.status(500).json({message: "Internal server error"});
+    }
+}
+
 module.exports = {
     getGoogleAuth,
     googleCallback,
+    getCurrentUser,
 };
