@@ -26,6 +26,18 @@ const userSchema = new mongoose.Schema(
             type: String,
             trim: true,
         },
+
+        googleAuth: {
+            accessToken: {
+                type: String,
+            },
+            refreshToken: {
+                type: String,
+            },
+            expiryDate: {
+                type: Date,
+            },
+        },
     },
     {
         timestamps: true,

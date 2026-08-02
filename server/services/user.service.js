@@ -1,6 +1,6 @@
 const User = require('../models/user.model');
 
-const findOrCreateUser = async (profile) => {
+const findOrCreateUser = async (profile , tokens) => {
 
     try {
 
@@ -8,15 +8,32 @@ const findOrCreateUser = async (profile) => {
 
         if (!existingUser) 
         {
-            newUser = await User.create({
+            const newUser = await User.create({
                 googleId: profile.id,
                 name: profile.name,
                 email: profile.email,
-                profilePicture: profile.picture
+                profilePicture: profile.picture,
+
+                googleAuth: {
+                    accessToken: tokens.access_token,
+                    refreshToken: tokens.refresh_token,
+                    expiryDate: tokens.expiry_date,
+                },
+
             });
 
             return newUser;
         }
+
+        existingUser.googleAuth.accessToken = tokens.access_token;
+
+        if (tokens.refresh_token) {
+            existingUser.googleAuth.refreshToken = tokens.refresh_token;
+        }
+
+        existingUser.googleAuth.expiryDate = new Date(tokens.expiry_date);
+
+        await existingUser.save();
 
         return existingUser;
 

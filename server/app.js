@@ -1,6 +1,18 @@
 const express = require("express");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 const app = express();
+
+app.use(
+    cors({
+        origin: "http://localhost:5173",
+        credentials: true,
+    })
+);
+
+app.use(cookieParser());
+app.use(express.json());
 
 const healthRoutes = require("./routes/health.routes");
 
@@ -8,10 +20,9 @@ const userRoutes = require("./routes/user.routes");
 
 const authRoutes = require("./routes/auth.routes");
 
-const cookieParser = require("cookie-parser");
+const gmailRoutes = require("./routes/gmail.routes");
 
 //to parse cookies from incoming requests
-app.use(cookieParser());
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +31,6 @@ app.use(cookieParser());
 */
 
 // Parses incoming JSON requests
-app.use(express.json());
 
 // Simple Logger Middleware
 app.use((req, res, next) => {
@@ -41,5 +51,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 
 app.use("/api/health", healthRoutes);
+
+app.use("/api/gmail", gmailRoutes);
 
 module.exports = app;

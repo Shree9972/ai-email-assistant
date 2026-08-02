@@ -14,7 +14,8 @@ const getGoogleAuthURL = () => {
         scope: [
             "openid",
             "profile",
-            "email"
+            "email",
+            "https://www.googleapis.com/auth/gmail.readonly",
         ]
     });
 
@@ -38,7 +39,10 @@ const getGoogleUser = async (code) => {
 
     //console.log("User profile data:", data);
 
-    return data;
+    return {
+        profile: data,
+        tokens,
+    };
 }
 
 

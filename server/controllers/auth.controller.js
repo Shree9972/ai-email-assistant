@@ -19,13 +19,13 @@ const googleCallback = async (req, res) => {
 
         //console.log("Authorization code:", code);
 
-        const profile = await getGoogleUser(code);
+        const { profile, tokens } = await getGoogleUser(code);
 
-        const user = await findOrCreateUser(profile);
+        const user = await findOrCreateUser(profile , tokens);
 
         const token = generateToken(user);
 
-        console.log("Generated JWT token:", token);
+        //console.log("Generated JWT token:", token);
 
         res.cookie("token", token, {
             httpOnly: true,

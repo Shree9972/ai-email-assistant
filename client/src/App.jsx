@@ -1,13 +1,20 @@
 import useAuth from "./hooks/useAuth";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-function App() {
+function App() 
+{
+    const { user, setUser, loading , checkAuth } = useAuth();
 
-    const { user } = useAuth();
+    if(loading) 
+    {
+        return <h1>Loading...</h1>;
+    }
 
     console.log(user);
 
     return (
-        <h1>AI Email Assistant</h1>
+        
+        <ProtectedRoute />
     );
 }
 
