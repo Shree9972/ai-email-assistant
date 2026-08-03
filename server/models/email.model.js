@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const attachmentSchema = new mongoose.Schema({
     
@@ -96,4 +96,4 @@ const emailSchema = new mongoose.Schema(
 
 emailSchema.index({ user: 1, gmailId: 1 }, { unique: true });
 
-export default mongoose.model("Email", emailSchema);
+module.exports = mongoose.model("Email", emailSchema);

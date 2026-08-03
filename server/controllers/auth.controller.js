@@ -4,6 +4,8 @@ const {findOrCreateUser} = require('../services/user.service');
 
 const {generateToken} = require('../services/jwt.service');
 
+const { syncEmails } = require('../services/emailSync.service');
+
 const getGoogleAuth = (req, res) => {
     
     const url = getGoogleAuthURL();
@@ -23,6 +25,8 @@ const googleCallback = async (req, res) => {
 
         const user = await findOrCreateUser(profile , tokens);
 
+        const result = await syncEmails(user);
+
         const token = generateToken(user);
 
         //console.log("Generated JWT token:", token);
@@ -34,7 +38,6 @@ const googleCallback = async (req, res) => {
         res.status(200).json({
             success: true,
             user,
-            token,
         });
 
     } 

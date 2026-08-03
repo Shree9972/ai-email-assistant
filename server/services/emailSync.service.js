@@ -46,3 +46,7 @@ const syncEmails = async (user) => {
     }
 
 };
+
+module.exports = {
+    syncEmails,
+};

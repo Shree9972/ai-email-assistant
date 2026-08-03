@@ -22,6 +22,8 @@ const authRoutes = require("./routes/auth.routes");
 
 const gmailRoutes = require("./routes/gmail.routes");
 
+const emailRoutes = require("./routes/email.routes");
+
 //to parse cookies from incoming requests
 
 /*
@@ -53,5 +55,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/health", healthRoutes);
 
 app.use("/api/gmail", gmailRoutes);
+
+app.use("/api/emails", emailRoutes);
 
 module.exports = app;
