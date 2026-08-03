@@ -42,6 +42,7 @@ const getMessage = async (accessToken, messageId) => {
     return response.data;
 };
 
+
 module.exports = {
     getMessages,
     getMessage,
