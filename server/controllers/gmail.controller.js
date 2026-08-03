@@ -1,4 +1,4 @@
-const { getMessages } = require("../services/gmail.service");
+const { getMessages , getMessage } = require("../services/gmail.service");
 
 const getUserMessages = async (req, res) => {
 
@@ -13,7 +13,9 @@ const getUserMessages = async (req, res) => {
             messages,
         });
 
-    } catch (error) {
+    } 
+    catch (error) 
+    {
 
         console.error("Error fetching Gmail messages:", error);
 
@@ -26,6 +28,33 @@ const getUserMessages = async (req, res) => {
 
 };
 
+const getUserMessage = async (req, res) => {
+    try {
+
+        const { id } = req.params;
+
+        const accessToken = req.user.googleAuth.accessToken;
+
+        const message = await getMessage(accessToken, id);
+
+        return res.status(200).json({
+            success: true,
+            message,
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        return res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+
+    }
+};
+
 module.exports = {
     getUserMessages,
+    getUserMessage,
 };
