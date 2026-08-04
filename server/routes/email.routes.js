@@ -4,6 +4,8 @@ const authMiddleware = require('../middlewares/auth.middleware');
 
 const router = express.Router();
 
-router.get('/user-emails', authMiddleware, emailController.getUserEmailsController);
+router.get('/', authMiddleware, emailController.getUserEmailsController);
+
+router.get('/:id', authMiddleware, emailController.getEmailByIdController);
 
 module.exports = router;
