@@ -10,13 +10,18 @@ const getUserEmails = async (userId, options) => {
         user: userId,
     };
 
-    if (options.label) {
-        query.label = options.label;
+    if (label) 
+    {
+        query.labels = label;
     }
 
     if(options.hasAttachments)
     {
-        query.attachments = { $exists: true, $ne: [] };
+        query.hasAttachments = options.hasAttachments;
+    }
+    else if(options.hasAttachments === false)
+    {
+        query.hasAttachments = false;
     }
 
     if(options.search) 
@@ -36,9 +41,9 @@ const getUserEmails = async (userId, options) => {
         };
     }
 
-    const totalEmails = await Email.countDocuments({
+    const totalEmails = await Email.countDocuments(
         query
-    });
+    );
 
     const totalPages = Math.ceil(totalEmails / limit);
 
@@ -76,7 +81,46 @@ const getEmailById = async (userId, emailId) => {
     return email;
 };
 
+
+const getDashboardStats = async (userId) => {
+
+    const totalEmails = await Email.countDocuments({ user: userId });
+
+    const unreadEmails = await Email.countDocuments({ user: userId, labels: "UNREAD" });
+
+    const emailsWithAttachments = await Email.countDocuments({ user: userId, hasAttachments: true });
+
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    const emailsReceivedToday = await Email.countDocuments({ user: userId, createdAt: { $gte: startOfToday } });
+
+    return {
+        totalEmails,
+        unreadEmails,
+        emailsWithAttachments,
+        emailsReceivedToday,
+    };
+    
+}
+
+const getEmailsByDateRange = async (userId, startDate, endDate) => {
+
+    const emails = await Email.find({
+        user: userId,
+        createdAt: {
+            $gte: startDate,
+            $lte: endDate
+        }
+    }).sort({ createdAt: -1 });
+
+    return emails;
+
+};
+
 module.exports = {
     getUserEmails,
     getEmailById,
+    getEmailsByDateRange,
+    getDashboardStats,
 };

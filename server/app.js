@@ -24,6 +24,8 @@ const gmailRoutes = require("./routes/gmail.routes");
 
 const emailRoutes = require("./routes/email.routes");
 
+const aiRoutes = require("./routes/ai.routes");
+
 //to parse cookies from incoming requests
 
 /*
@@ -57,5 +59,7 @@ app.use("/api/health", healthRoutes);
 app.use("/api/gmail", gmailRoutes);
 
 app.use("/api/emails", emailRoutes);
+
+app.use("/api/ai", aiRoutes);
 
 module.exports = app;

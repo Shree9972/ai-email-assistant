@@ -9,7 +9,7 @@ const oauth2Client = new google.auth.OAuth2(
 
 const getGoogleAuthURL = () => {
 
-    const url = oauth2Client.generateAuthUrl({
+    const url = oauth2Client.generateAuthUrl({      
         access_type: 'offline',
         scope: [
             "openid",
