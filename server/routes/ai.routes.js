@@ -9,4 +9,6 @@ router.get('/summary/today', authMiddleware, aiController.summarizeEmailsControl
 
 router.get('/tasks/today', authMiddleware, aiController.extractTasksController);
 
+router.get('/replies/today', authMiddleware, aiController.extractRepliesController);
+
 module.exports = router;
