@@ -11,4 +11,6 @@ router.get('/tasks/today', authMiddleware, aiController.extractTasksController);
 
 router.get('/replies/today', authMiddleware, aiController.extractRepliesController);
 
+router.get('/dashboard/today', authMiddleware, aiController.extractDashboardController);
+
 module.exports = router;

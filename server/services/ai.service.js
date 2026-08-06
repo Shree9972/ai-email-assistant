@@ -3,6 +3,7 @@ const { generateText } = require('../providers/gemini.provider');
 const {buildSummaryPrompt} = require('../prompts/summary.prompt');
 const {buildTaskPrompt} = require('../prompts/task.prompt');
 const {buildReplyRequiredPrompt} = require('../prompts/reply.prompt');
+const {buildDashboardPrompt} = require('../prompts/dashboard.prompt');
 
 
 const summarizeEmails = async (emails) => {
@@ -56,9 +57,23 @@ const extractReplies = async (emails) => {
 
 };
 
+const extractDashboard = async (emails) => {
+
+    const formattedEmails = await prepareEmailsForAI(emails);
+
+    const prompt = await buildDashboardPrompt(formattedEmails);
+
+    const aiResponse = await generateText(prompt);
+
+    const parsed = JSON.parse(aiResponse);
+
+    return parsed;
+};
+
 
 module.exports = {
     summarizeEmails,
     extractTasks,
     extractReplies,
+    extractDashboard,
 };
