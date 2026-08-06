@@ -1,4 +1,4 @@
-const { summarizeEmails } = require('../services/ai.service');
+const { summarizeEmails , extractTasks} = require('../services/ai.service');
 const { getEmailsByDateRange } = require('../services/email.service');
 
 const summarizeEmailsController = async (req, res) => {
@@ -14,7 +14,7 @@ const summarizeEmailsController = async (req, res) => {
 
         const summary = await summarizeEmails(emails);
 
-        res.status(200).json({ summary });
+        res.status(200).json(summary);
     } 
     catch (error) 
     {
@@ -23,6 +23,31 @@ const summarizeEmailsController = async (req, res) => {
     }
 };
 
+
+const extractTasksController = async (req, res) => {
+
+    const startDate = new Date();
+    startDate.setHours(0, 0, 0, 0);
+
+    const endDate = new Date();
+    endDate.setHours(23, 59, 59, 999);
+
+    try {
+        const emails = await getEmailsByDateRange(req.user._id, startDate, endDate);
+
+        const tasks = await extractTasks(emails);
+
+        res.status(200).json(tasks);
+    }
+    catch (error)
+    {
+        console.error('Error extracting tasks:', error);
+        res.status(500).json({ message: 'Failed to extract tasks' });
+    }
+
+}
+
 module.exports = {
     summarizeEmailsController,
+    extractTasksController,
 };

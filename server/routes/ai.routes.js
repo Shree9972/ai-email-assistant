@@ -7,4 +7,6 @@ const router = express.Router();
 // Route to summarize emails
 router.get('/summary/today', authMiddleware, aiController.summarizeEmailsController);
 
+router.get('/tasks/today', authMiddleware, aiController.extractTasksController);
+
 module.exports = router;
