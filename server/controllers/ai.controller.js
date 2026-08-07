@@ -1,5 +1,6 @@
 const { summarizeEmails , extractTasks , extractReplies , extractDashboard , generateDashboardAnalysis} = require('../services/ai.service');
 const { getEmailsByDateRange } = require('../services/email.service');
+const {getDashboardData} = require('../services/dashboard.service')
 
 const summarizeEmailsController = async (req, res) => {
 
@@ -109,10 +110,27 @@ const generateDashboardAnalysisController = async (req, res) => {
     }
 };
 
+const getDashboardStatsAnalysisController = async (req , res) =>{
+
+    try
+    {
+        const dashboardData = await getDashboardData(req.user._id);
+
+        res.status(200).json(dashboardData);
+    }
+    catch(error)
+    {
+        console.error('Error generating dashboard analysis:', error);
+        res.status(500).json({ message: 'Failed to generate dashboard analysis' });
+    }
+
+}
+
 module.exports = {
     summarizeEmailsController,
     extractTasksController,
     extractRepliesController,
     extractDashboardController,
     generateDashboardAnalysisController,
+    getDashboardStatsAnalysisController,
 };

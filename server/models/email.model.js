@@ -88,6 +88,7 @@ const emailSchema = new mongoose.Schema(
     },
 
     attachments: [attachmentSchema],
+    
   },
   {
     timestamps: true,
