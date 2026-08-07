@@ -1,4 +1,4 @@
-const { summarizeEmails , extractTasks , extractReplies , extractDashboard} = require('../services/ai.service');
+const { summarizeEmails , extractTasks , extractReplies , extractDashboard , generateDashboardAnalysis} = require('../services/ai.service');
 const { getEmailsByDateRange } = require('../services/email.service');
 
 const summarizeEmailsController = async (req, res) => {
@@ -91,11 +91,28 @@ const extractDashboardController = async (req, res) => {
         console.error('Error building dashboard prompt:', error);
         res.status(500).json({ message: 'Failed to build dashboard prompt' });
     }
-}
+};
+
+const generateDashboardAnalysisController = async (req, res) => {
+
+    try
+    {
+
+        const analysis = await generateDashboardAnalysis(req.user._id); 
+
+        res.status(200).json(analysis);
+    }
+    catch (error)
+    {
+        console.error('Error generating dashboard analysis:', error);
+        res.status(500).json({ message: 'Failed to generate dashboard analysis' });
+    }
+};
 
 module.exports = {
     summarizeEmailsController,
     extractTasksController,
     extractRepliesController,
     extractDashboardController,
+    generateDashboardAnalysisController,
 };

@@ -13,4 +13,6 @@ router.get('/replies/today', authMiddleware, aiController.extractRepliesControll
 
 router.get('/dashboard/today', authMiddleware, aiController.extractDashboardController);
 
+router.get('/dashboard/analysis', authMiddleware, aiController.generateDashboardAnalysisController);
+
 module.exports = router;

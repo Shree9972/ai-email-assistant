@@ -4,6 +4,8 @@ const {buildSummaryPrompt} = require('../prompts/summary.prompt');
 const {buildTaskPrompt} = require('../prompts/task.prompt');
 const {buildReplyRequiredPrompt} = require('../prompts/reply.prompt');
 const {buildDashboardPrompt} = require('../prompts/dashboard.prompt');
+const {AIAnalysis} = require('../models/aiAnalysis.model');
+const { getEmailsByDateRange } = require('../services/email.service');
 
 
 const summarizeEmails = async (emails) => {
@@ -57,6 +59,21 @@ const extractReplies = async (emails) => {
 
 };
 
+const saveTodayAnalysis = async (userId, analysis) => {
+
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    const savedAnalysis = await AIAnalysis.create({
+        user: userId,
+        analysisDate: startOfToday,
+        ...analysis
+    });
+
+    return savedAnalysis;
+}
+
+
 const extractDashboard = async (emails) => {
 
     const formattedEmails = await prepareEmailsForAI(emails);
@@ -71,9 +88,56 @@ const extractDashboard = async (emails) => {
 };
 
 
+const getTodayAnalysis = async (userId) => {
+
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    const emails = await AIAnalysis.findOne({
+        user: userId, 
+        analysisDate: startOfToday,
+    }).lean();
+
+    return emails;
+
+};
+
+const generateDashboardAnalysis = async (userId) => {
+
+    const todaysAnalysis = await getTodayAnalysis(userId);
+
+    if(todaysAnalysis)
+    {
+        return todaysAnalysis;
+    }
+
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    const endOfToday = new Date();  
+    endOfToday.setHours(23, 59, 59, 999);
+
+    const emails = await getEmailsByDateRange(userId, startOfToday, endOfToday);
+
+    const formattedEmails = await prepareEmailsForAI(emails);
+
+    const dashboardPrompt = await buildDashboardPrompt(formattedEmails);
+
+    const dashboardResponse = await generateText(dashboardPrompt);
+
+    const parsedDashboard = JSON.parse(dashboardResponse);
+
+    const savedAnalysis = await saveTodayAnalysis(userId, parsedDashboard);
+
+    return savedAnalysis;
+
+};
+
+
 module.exports = {
     summarizeEmails,
     extractTasks,
     extractReplies,
     extractDashboard,
+    generateDashboardAnalysis,
 };

@@ -100,3 +100,7 @@ const aiAnalysisSchema = new mongoose.Schema(
 aiAnalysisSchema.index({ user: 1, analysisDate: 1 }, { unique: true });
 
 const AiAnalysis = mongoose.model('AIAnalysis', aiAnalysisSchema);
+
+module.exports = {
+    AIAnalysis: AiAnalysis,
+};

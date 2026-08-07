@@ -81,7 +81,6 @@ const getEmailById = async (userId, emailId) => {
     return email;
 };
 
-
 const getDashboardStats = async (userId) => {
 
     const totalEmails = await Email.countDocuments({ user: userId });
