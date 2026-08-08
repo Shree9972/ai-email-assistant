@@ -10,6 +10,8 @@ export const AuthProvider = ({ children }) => {
 
     const [loading, setLoading] = useState(true);
 
+    const isAuthenticated = user !== null;
+
     const checkAuth = async () => {
 
         try 
@@ -34,7 +36,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
 
-        <AuthContext.Provider value={{ user, setUser, loading , checkAuth }}>
+        <AuthContext.Provider value={{ user, loading ,isAuthenticated , checkAuth }}>
             {children}
         </AuthContext.Provider>
 

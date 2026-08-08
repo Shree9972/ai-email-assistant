@@ -1,20 +1,35 @@
-import useAuth from "./hooks/useAuth";
-import ProtectedRoute from "./components/ProtectedRoute";
+import { Routes, Route } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
-function App() 
-{
-    const { user, setUser, loading , checkAuth } = useAuth();
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
-    if(loading) 
-    {
-        return <h1>Loading...</h1>;
-    }
-
-    console.log(user);
+function App() {
 
     return (
-        
-        <ProtectedRoute />
+
+            <Routes>
+
+                {/* Public route */}
+                <Route
+                    path="/login"
+                    element={<Login />}
+                />
+
+                {/* Protected route */}
+                <Route
+                    path="/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
+
+            </Routes>
+    
+
     );
 }
 
